@@ -1,0 +1,67 @@
+
+li.nav-item
+{   
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 5px;
+    font-weight: bold;
+    
+}
+
+li.nav-item:hover
+{
+    background:LightSeaGreen;
+}
+
+li.nav-item:hover
+{
+    text-decoration: underline;
+}
+
+nav.navbar-expand-lg
+{
+
+    background-color: lightsteelblue;
+}
+
+
+
+h1
+{
+    font-weight: bold;
+    text-align: center;
+}
+
+@media only screen and (min-width:600px)
+{
+   
+    header h1
+    {
+        font-size: 120px;
+        padding-top: 70px;
+    }
+}
+
+@media only screen and (max-width:600px)
+{
+    header h1
+    {
+    font-size: 100px;
+    padding-top: 70px;
+}
+}
+
+header 
+{
+    width: 100%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+
+
+header
+{
+    background: linear-gradient(grey, lightGray, darkGray );   
+    height: 300px;
+    width: 100%;
+}

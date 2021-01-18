@@ -3,8 +3,7 @@
 include_once("classes/User.php");
 include_once("classes/UserDatabase.php");
 include_once("classes/Article.php");
-
-session_start();
+include_once("sessionProcessing.php");
 
 $databaseConnection = new DatabaseConnection('localhost', 'root', '', 'klienci');
 
@@ -37,8 +36,6 @@ if(filter_input(INPUT_GET, "editId")) {
 } 
 
 if (isset($_POST['submitForm'])) {
-
-  session_start();
 
   if (!empty($_FILES["image"]["name"])) {
     $filename = basename($_FILES["image"]["name"]);

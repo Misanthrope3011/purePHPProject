@@ -2,6 +2,7 @@
 include_once ("classes/User.php");
 include_once ("RegistrationFrom.php");
 include_once ("classes/UserDatabase.php");
+include_once ("sessionProcessing.php");
 
 
 $databaseConnection = new DatabaseConnection("localhost", "root", "", "klienci");
@@ -19,8 +20,8 @@ $registrationForm = new RegistrationForm();
   if (isset($_POST['login'])) {
       $var = $databaseConnection -> selectUser($_POST['username'], $_POST['password1'], 'users');
       if ($var > 0) {
-        $databaseConnection ->delete("DELETE FROM logged_in_users WHERE userId = $var");
         session_start();
+        $databaseConnection ->delete("DELETE FROM logged_in_users WHERE userId = $var");
         $dateTime = new DateTime('NOW');
         $stringDate = $dateTime->format('Y-m-d H:i:s');
         $sessionId = session_id();

@@ -1,5 +1,4 @@
 <?php
-session_start();
 include_once("classes/User.php");
 include_once("classes/UserDatabase.php");
 include_once("sessionProcessing.php");
@@ -134,9 +133,7 @@ Boxstats.pl
 <div id="articleContainer">
 
   <?php
-    
-    $numberOfArticles = Article::displayArticles($databaseConnection);
-
+    $numberOfArticles = Article::displayArticles($databaseConnection, Article::$numberOfArticlesOnPage);
   ?>
 
 </div>
@@ -170,8 +167,9 @@ Boxstats.pl
 <div id="link"> Strona: 
 <script>
   $(document).ready(function() {
-      var numberOfItemsOnPage = 2;
+      var numberOfItemsOnPage = '<?php echo Article::$numberOfArticlesOnPage; ?>';
       var numberOfArticles = '<?php echo $numberOfArticles; ?>';
+      
       for(var i = 1; (i < numberOfArticles / (numberOfItemsOnPage) + 1);i++) {
             $("#link").append('<a href="index.php?page='+ i + '" alt="strona">' + i +'</a>' );
         }

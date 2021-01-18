@@ -1,12 +1,32 @@
 <?php
-session_start();
 include_once("classes/User.php");
 include_once("classes/UserDatabase.php");
 include_once("sessionProcessing.php");
 include_once("classes/Galery.php");
 include_once("classes/Article.php");
+include_once("classes/Comment.php");
 
-$databaseConnection = new DatabaseConnection('localhost', 'root', '', 'klienci');
+$currentDisplayedArticle = null;
+$databaseConnection = new DatabaseConnection('localhost', 'root','', 'klienci');
+
+
+    if (filter_input(INPUT_GET, "showFull")) {
+        if(Article::checkIfArticleExists($databaseConnection, filter_input(INPUT_GET, "showFull"))) {
+          $currentDisplayedArticle = filter_input(INPUT_GET, "showFull");
+        } else {
+          ?> <script type="text/javascript"> 
+          $(function(){
+              $("#form").hide();
+              createPopup("Zły adres", "Strona o podanym odnosniku nie istnieje. Nastąpi przekierowanie do strony głównej");
+          }); </script> <?php
+        }
+    } 
+    if(filter_input(INPUT_POST, "submit")) {
+      $currentUser = unserialize($_SESSION['currentUser']);
+      $comment = new Comment($currentUser -> id, $currentDisplayedArticle, $_POST['comment']);
+      $comment -> addCommentToDatabase($databaseConnection);
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -31,25 +51,13 @@ $databaseConnection = new DatabaseConnection('localhost', 'root', '', 'klienci')
 <body>
 <?php
 
-if (isset($_POST['images']) && isset($_POST['titleOfGalery'])){
-  
-
-}
-
-
 if (filter_input(INPUT_GET, "action") == "logout") {
   User::logout($databaseConnection);
 }
-if (isset($_POST['id'])){
-  $id = $_POST['id'];
-  $query = "delete from article where article_id = $id";
-  $databaseConnection -> delete($query); ?>
-
-<?php } ?>
+ ?>
 
   <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/pl_PL/sdk.js#xfbml=1&version=v7.0"></script>
-
 
 <div class="row">
   <header>
@@ -60,9 +68,7 @@ if (isset($_POST['id'])){
   echo $currentUserData -> userName .'<br>'. $currentUserData -> id ?> 
   <br/> <a href = "rejestracja.php?action=logout">"<button id="logOut"> Wyloguj </button> </a>
 <?php } else {
-
     echo '<a href="rejestracja.php?"> Zaloguj </a>';
-
 } ?>
 </div>
   <div id="show"> </div>
@@ -133,12 +139,56 @@ Boxstats.pl
 <div id="articleContainer">
 
   <?php
-    
-    $numberOfArticles = Article::displayArticles($databaseConnection);
-
+        if ($currentDisplayedArticle !== NULL) {
+          $arrayForArticle = $databaseConnection->select("SELECT * from article WHERE article_id = $currentDisplayedArticle");
+          echo ' <div class="post"><h3>' .$arrayForArticle[0] ->title. ' </h3> <b> ' .$arrayForArticle[0] -> header. '</b> <br/> <div id="imageGrid"> ' .$arrayForArticle[0] -> content. '  ';?>
+          <img src = "data:image/jpg;charset=utf8;base64,<?php echo base64_encode($arrayForArticle[0] -> image) ?> " />;  <?php
+          echo '</div> </div>';
+        }
   ?>
+ 
+ <div class="form-group">
+   <form id = "form" action = "fullView.php?showFull=<?php echo $currentDisplayedArticle ?>" method = "POST"> 
+    <label for="comment" id ="comment"> Dodaj komentarz </label>
+    <textarea class="form-control" id="comment" name ="comment" rows="3"></textarea>
+    <input type="submit" class="btn btn-success" id="submit" name="submit" value = "Wyslij" />
+  </form>
+</div>
+
+<div id="commentSection">
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <div class="card card-white post">
+                <div class="post-heading">
+                    <div class="float-left meta">
+                        <div class="title h5">
+                            <a href="#"><b>Ryan Haywood</b></a>
+                            made a post.
+                        </div>
+                        <h6 class="text-muted time">1 minute ago</h6>
+                    </div>
+                </div> 
+                <div class="post-description"> 
+                    <p>Bootdey is a gallery of free snippets resources templates and utilities for bootstrap css hmtl js framework. Codes for developers and web designers</p>
+                </div>
+            </div>
+        </div>
+
+        
+        
+    </div>
+</div>
+        Komentarze: <br>
+      <?php $currentArticleComments = (Comment::getAllCommentsFromArticle($databaseConnection, $currentDisplayedArticle)); 
+            foreach($currentArticleComments as $comment) {
+              echo '<div class="commentItem">'.$comment -> userName . '<br>' . $comment -> commentContent .' </div> <br>';
+            }
+      ?>
+</div>
 
 </div>
+ 
 </div>
 
 <div class="col-sm-3">

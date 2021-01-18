@@ -25,7 +25,6 @@ class User {
     $this -> date = new DateTime('NOW');
     $this -> dateBirth = date('Y-m-d', strtotime($dateBirth));    //nadać wartości pozostałym polom – zgodnie z parametrami
     }
-
   
 static function logout($databaseConnection) {
     session_start();

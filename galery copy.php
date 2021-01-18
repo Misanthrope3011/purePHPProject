@@ -105,7 +105,7 @@
         <input type="file" class="form-control" id="image">
       </div>
       <div class="form-group">
-          <button id="createNew" class="btn btn-primary"> Dodaj </button>
+          <button id="createNew" class="btn btn-primary" onlick="addToDatabase()"> Dodaj </button>
       </div>
   </form>
 

@@ -2,9 +2,9 @@
   include_once("classes/UserDatabase.php");
   include_once("classes/Galery.php");
   include_once("Galery.php");
+  include_once("sessionProcessing.php");
 
   $databaseConnection = new DatabaseConnection('localhost', 'root', '', 'klienci');
-  //$availableGaleryIndexes = Galery::selectUniqueGaleryIDs($databaseConnection);
  $arrayOfIndexesAndThumbnails = Galery::selectImageForThumbnail($databaseConnection);
 ?>
 
@@ -33,6 +33,24 @@
 </head>
 <body>
   <div class="row">
+  <div class="modal" id="myModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Modal title</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" id="close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
     <header>
       <div id="userDisplayData"> </div>
     <div id="show"> </div>
@@ -83,6 +101,8 @@
   </nav>
   <!--/.Navbar-->
       <div class="galeria">
+
+
       <?php
      for ($i = 0; $i < count($arrayOfIndexesAndThumbnails); $i++) { 
          echo '<div class="inner"> <a href="galerySlider.php?galery='.$i.'" alt="galeria"> <img src= galeria_zdjecia/'.$arrayOfIndexesAndThumbnails[$i] -> thumbnail . ' alt=zdjecie> </a> <h3>'. $arrayOfIndexesAndThumbnails[$i] -> title .'</h3> </div>';
@@ -113,9 +133,6 @@
   </form>
 
   <div class = "container"> </div>
-
-
-
 
 </body>
 </html>

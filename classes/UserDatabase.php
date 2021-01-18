@@ -111,7 +111,7 @@ function password_verify($passwd, $hash) {
 
     if ($result = $this->mysqli->query($sql)) {
       while ($value = ($result -> fetch_object())) {
-      array_push($stack, $value); 
+      array_push($stack, $value);       
     }
   }
     return $stack;

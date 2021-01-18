@@ -1,6 +1,7 @@
 
-function createPopup(text) {
-  $(".modal-body").text(text);
+function createPopup(title, bodyText) {
+  $(".modal-title").text(title);
+  $(".modal-body").text("Czemu idk");
   $('#myModal').modal('show');
 }
 

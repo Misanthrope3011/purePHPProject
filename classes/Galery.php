@@ -1,7 +1,5 @@
 <?php 
 
-include_once ("classes/UserDatabase.php");
-
 class Galery {
 
     protected $galeryTitle;

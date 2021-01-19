@@ -182,7 +182,7 @@ Boxstats.pl
         Komentarze: <br>
       <?php $currentArticleComments = (Comment::getAllCommentsFromArticle($databaseConnection, $currentDisplayedArticle)); 
             foreach($currentArticleComments as $comment) {
-              echo '<div class="commentItem">'.$comment -> userName . '<br>' . $comment -> commentContent .' </div> <br>';
+              echo '<div class="commentItem">'.$comment -> userName . '<br>' . $comment -> commentContent .' </div>' . $comment -> dateOfCreation.'<br>';
             }
       ?>
 </div>

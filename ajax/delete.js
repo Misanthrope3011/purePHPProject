@@ -4,7 +4,7 @@ function delete_data(id) {
         url: "ajax/delete.php",
         data: {'id': id},
         success: function(response) {
-            location.reload();
+            alert(response);
         },
         error: function(request, status, error){
             alert(error);

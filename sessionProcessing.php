@@ -11,17 +11,26 @@
 
 session_start();
 
-if (!isset($_SESSION['currentUser'])) {
- ?> <script> 
-    $(function() {
-            if($(location).attr('pathname') == '/testside/create.php') {
-                $('h3').hide();
-                $('#form').hide();
-                setTimeout(function(){ window.location.replace("index.php");} , 3500);
-            } 
-           if ($(location).attr('pathname') == "/testside/galery.php") {
+    if (!isset($_SESSION['currentUser'])) {
+    ?> <script> 
+        $(function() {
+                if($(location).attr('pathname') == '/testside/create.php') {
+                    $('h3').hide();
+                    $('#form').hide();
+                    createPopup("Odmowa dostępu", "Nie masz uprawnien do podglądu");
+                    setTimeout(function(){ window.location.replace("index.php");} , 3500);
+                } else
+            if ($(location).attr('pathname') == "/testside/galery.php") {
                 $('#form').hide(); 
-           } 
-    });
-    </script>
-<?php } ?>         
+            } 
+        });
+        </script>
+        <?php } 
+        else { ?>  
+            <script> 
+              $(function() {
+                $('#registerForm').hide(); 
+              });
+            </script>
+        <?php            
+        } ?>         

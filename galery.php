@@ -52,7 +52,16 @@
             </div>
           </div>
     <header>
-      <div id="userDisplayData"> </div>
+    <div id="userDisplayData"> 
+    <?php     if (isset($_SESSION['currentUser'])) { ?>
+                <?php
+                  $currentUserData = unserialize($_SESSION['currentUser']);
+                  echo $currentUserData -> userName .'<br>'. $currentUserData -> id ?> 
+                  <br/> <a href = "rejestracja.php?action=logout">"<button id="logOut"> Wyloguj </button> </a>
+                <?php } else {
+                  echo '<a href="rejestracja.php?"> Zaloguj </a>';  
+              } ?>
+      </div>
     <div id="show"> </div>
   <h1>
   Boxstats.pl
@@ -105,7 +114,7 @@
 
       <?php
      for ($i = 0; $i < count($arrayOfIndexesAndThumbnails); $i++) { 
-         echo '<div class="inner"> <a href="galerySlider.php?galery='.$i.'" alt="galeria"> <img src= galeria_zdjecia/'.$arrayOfIndexesAndThumbnails[$i] -> thumbnail . ' alt=zdjecie> </a> <h3>'. $arrayOfIndexesAndThumbnails[$i] -> title .'</h3> </div>';
+         echo '<div class="inner"> <a href="galerySlider.php?galery='.$arrayOfIndexesAndThumbnails[$i] -> galery_id.'" alt="galeria"> <img src= galeria_zdjecia/'.$arrayOfIndexesAndThumbnails[$i] -> thumbnail . ' alt=zdjecie> </a> <h3>'. $arrayOfIndexesAndThumbnails[$i] -> title .'</h3> </div>';
     } ?>
       </div>
 

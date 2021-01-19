@@ -49,8 +49,7 @@ $(document).ready(function()
     if (retrieveImages() === null) {
         galeryList = [];
     } else {
-        galeryList = retrieveImages()
-        ;
+        galeryList = retrieveImages();
     }
 
     filesInput.on("change", function(e) {
@@ -110,7 +109,7 @@ $(document).ready(function()
             data:{images: serializedData,
                 titleOfGalery: titleOfGalery},
             success: function(data) {
-               alert('Elo');
+               alert(data);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
                 alert("Status: " + textStatus); alert("Error: " + errorThrown); 

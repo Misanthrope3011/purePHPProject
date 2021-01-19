@@ -58,7 +58,6 @@ class DatabaseConnection {
  }
  public function insert($sql) {
      if ($this->mysqli->query($sql) === TRUE) {
-       echo 'Dodane';
          return true;
      } else {
        echo 'Nie dodane',  $this->mysqli ->error;

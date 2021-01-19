@@ -42,7 +42,6 @@ class Article {
     static function displayArticles($databaseConnection, $numberOfArticlesOnPage) {
         $arrayForArticle = $databaseConnection->select("SELECT * from article");
         $arrayForArticle = array_reverse($arrayForArticle);
-
         if (!(filter_input(INPUT_GET, "page"))) {
            $pageNumber = 1;
         } else {
@@ -57,16 +56,16 @@ class Article {
           if (isset($_SESSION['currentUser'])) {
             $currentUserData = unserialize($_SESSION['currentUser']);
             if($currentUserData -> status == USER::STATUS_USER) {
-              echo ' <div class="post"> <h3>' .$arrayForArticle[$i] ->title. ' </h3>    <b> ' .$arrayForArticle[$i] -> header. '</b> <br/>  <div id="imageGrid">' .substr($arrayForArticle[$i] -> content, 100). '  ';?>
+              echo ' <div class="post"> <h3>' .$arrayForArticle[$i] ->title. ' </h3>    <b> ' .$arrayForArticle[$i] -> header. '</b> <br/>  <div id="imageGrid">' .substr($arrayForArticle[$i] -> content, 0, 450). '  ';?>
               <img src = "data:image/jpg;charset=utf8;base64,<?php echo base64_encode($arrayForArticle[$i] -> image) ?> " />;  <?php
               echo '</div> </div> <a class = "fullView" href ="fullView.php?showFull=' . $arrayForArticle[$i] -> article_id.'">';
             } else {
-              echo ' <div class="post"><h3>' .$arrayForArticle[$i] ->title. ' </h3>    <b> ' .$arrayForArticle[$i] -> header. '</b> <br/>  <div id="imageGrid">' .substr($arrayForArticle[$i] -> content, 100). ' ';?>
+              echo ' <div class="post"><h3>' .$arrayForArticle[$i] ->title. ' </h3>    <b> ' .$arrayForArticle[$i] -> header. '</b> <br/>  <div id="imageGrid">' .substr($arrayForArticle[$i] -> content, 0,  450). ' ';?>
               <img src = "data:image/jpg;charset=utf8;base64,<?php echo base64_encode($arrayForArticle[$i] -> image) ?> " />; 
               <?php echo '</div>   <button class="btn btn-danger"' . "onclick=delete_data({$arrayForArticle[$i]->article_id})". '> x </button> <a href = "create.php?editId=' .$arrayForArticle[$i] -> article_id .'"  <button class="edit">  E  </button> <a class = "fullView" href ="fullView.php?showFull=' . $arrayForArticle[$i] -> article_id.'">  View full </a> </div> <hr>';     
             }
          } else {
-          echo ' <div class="post"><h3>' .$arrayForArticle[$i] ->title. ' </h3>    <b> ' .$arrayForArticle[$i] -> header. '</b> <br/> <div id="imageGrid"> ' .substr($arrayForArticle[$i] -> content, 100). '  ';?>
+          echo ' <div class="post"><h3>' .$arrayForArticle[$i] ->title. ' </h3>    <b> ' .$arrayForArticle[$i] -> header. '</b> <br/> <div id="imageGrid"> ' .substr($arrayForArticle[$i] -> content, 0, 450). '  ';?>
           <img src = "data:image/jpg;charset=utf8;base64,<?php echo base64_encode($arrayForArticle[$i] -> image) ?> " />;  <?php
           echo '</div> </div>';
           }

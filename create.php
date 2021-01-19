@@ -11,15 +11,15 @@ if(filter_input(INPUT_GET, "editId")) {
     $articleId = intval(filter_input(INPUT_GET, "editId"));
     echo "SELECT * from article WHERE article_id= $articleId";
     $articleToEdition = $databaseConnection -> select("SELECT * from article WHERE article_id= $articleId");
-    $articleTitle = $articleToEdition[0] -> title;
-    $articleHeader = $articleToEdition[0] -> header;
-    $articleContent = $articleToEdition[0] -> content;
+    $articleTitle = addslashes($articleToEdition[0] -> title);
+    $articleHeader = addslashes($articleToEdition[0] -> header);
+    $articleContent = addslashes($articleToEdition[0] -> content);
     $imageContent = addslashes($articleToEdition[0] -> image);
   ?>
   <script>
-    var articleTitle = "<?php echo $articleTitle; ?>";
-    var articleHeader = "<?php echo $articleHeader; ?>";
-    var articleContent = "<?php echo $articleContent; ?>";
+    var articleTitle = "<?php echo $articleTitle?>";
+    var articleHeader = "<?php echo $articleHeader ?>";
+    var articleContent = "<?php echo $articleContent ?>";
 
     $(document).ready(function() {
       
@@ -49,7 +49,7 @@ if (isset($_POST['submitForm'])) {
   }
 
   $userData = unserialize($_SESSION['currentUser']);
-  $article = new Article($_POST['title'], $_POST['header'], $_POST['content'], $userData -> id, $imageContent);
+  $article = new Article(addslashes($_POST['title']), addslashes($_POST['header']), addslashes($_POST['content']), $userData -> id, $imageContent);
 
     if(filter_input(INPUT_GET, "editId")){
         $article -> updateArticle($databaseConnection, $articleId);
@@ -82,7 +82,18 @@ if (isset($_POST['submitForm'])) {
   
     <div class="row">
       <header>
-        <div id="userDisplayData"> </div>
+      <div id="userDisplayData"> 
+    <?php     if (isset($_SESSION['currentUser'])) { ?>
+<?php
+  $currentUserData = unserialize($_SESSION['currentUser']);
+  echo $currentUserData -> userName .'<br>'. $currentUserData -> id ?> 
+  <br/> <a href = "rejestracja.php?action=logout">"<button id="logOut"> Wyloguj </button> </a>
+<?php } else {
+
+    echo '<a href="rejestracja.php?"> Zaloguj </a>';
+
+} ?>
+</div>
       <div id="show"> </div>
     <h1>
     Boxstats.pl
@@ -169,7 +180,7 @@ if (isset($_POST['submitForm'])) {
     
            <div class="form-group">
               <label for="articleContent">Treść</label>
-              <textarea class="form-control" id="articleContent" name="content" placeholder="Treść" rows="3"></textarea>
+              <textarea class="form-control" id="articleContent" name="content" placeholder="Treść" rows="6"></textarea>
             </div>
     
           <div class="form-group">

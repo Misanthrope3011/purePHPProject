@@ -26,7 +26,6 @@ $databaseConnection = new DatabaseConnection('localhost', 'root','', 'klienci');
       $comment = new Comment($currentUser -> id, $currentDisplayedArticle, $_POST['comment']);
       $comment -> addCommentToDatabase($databaseConnection);
     }
-
 ?>
 
 <!DOCTYPE html>
@@ -157,6 +156,7 @@ Boxstats.pl
 
 <div id="commentSection">
 <div class="container">
+<!--
     <div class="row">
         <div class="col-8">
             <div class="card card-white post">
@@ -174,15 +174,13 @@ Boxstats.pl
                 </div>
             </div>
         </div>
-
-        
-        
-    </div>
-</div>
-        Komentarze: <br>
+-->
       <?php $currentArticleComments = (Comment::getAllCommentsFromArticle($databaseConnection, $currentDisplayedArticle)); 
+            $currentArticleComments = array_reverse($currentArticleComments);
             foreach($currentArticleComments as $comment) {
-              echo '<div class="commentItem">'.$comment -> userName . '<br>' . $comment -> commentContent .' </div>' . $comment -> dateOfCreation.'<br>';
+              echo '<div class="row"> <div class="col-8"> <div class="card card-white post"><div class="post-heading"> <div class="float-left meta">';
+              echo '<div class="title h5">  <a href="#"><b>'.$comment -> userName. '</b></a> </div> </div>  <h6 class="text-muted time">' .$comment -> dateOfCreation.' </h6>';
+              echo '</div> <div class="post-description">' .$comment -> commentContent . '</div></div> </div> <button class="btn btn-danger" onclick=delete_comment('.$comment -> commentID.')> x </button></div>';
             }
       ?>
 </div>

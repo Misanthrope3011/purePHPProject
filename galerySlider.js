@@ -109,10 +109,8 @@ $(document).ready(function()
             data:{images: serializedData,
                 titleOfGalery: titleOfGalery},
             success: function(data) {
-               alert(data);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                alert("Status: " + textStatus); alert("Error: " + errorThrown); 
             }      
          });
         

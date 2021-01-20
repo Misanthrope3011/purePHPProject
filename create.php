@@ -13,13 +13,18 @@ if(filter_input(INPUT_GET, "editId")) {
     $articleToEdition = $databaseConnection -> select("SELECT * from article WHERE article_id= $articleId");
     $articleTitle = addslashes($articleToEdition[0] -> title);
     $articleHeader = addslashes($articleToEdition[0] -> header);
+    $articleHeader = preg_replace( "/\r|\n/", "enter123", $articleHeader);
     $articleContent = addslashes($articleToEdition[0] -> content);
+    $articleContent = preg_replace( "/\r|\n/", "enter123", $articleContent);
     $imageContent = addslashes($articleToEdition[0] -> image);
   ?>
   <script>
-    var articleTitle = "<?php echo $articleTitle?>";
-    var articleHeader = "<?php echo $articleHeader ?>";
-    var articleContent = "<?php echo $articleContent ?>";
+    var articleTitle = '<?php echo $articleTitle?>';
+    var articleHeader = '<?php echo $articleHeader ?>';
+    var articleContent = '<?php echo $articleContent ?>';
+
+    var articleHeader = articleHeader.replaceAll('enter123', '\n');
+    var articleContent = articleContent.replaceAll('enter123', '\n');
 
     $(document).ready(function() {
       
@@ -30,8 +35,7 @@ if(filter_input(INPUT_GET, "editId")) {
     });
 
   </script> 
-
-
+  
   <?php
 } 
 
@@ -204,7 +208,7 @@ if (isset($_POST['submitForm'])) {
                   
                     <dt class="col-sm-3">12.06 </dt>
                     <dd class="col-sm-9">Gala Wach Boxing Night- Mariusz Wach- Kevin Johnson - Pałac w Konarach</dd>
-            
+            W
                     <dt class="col-sm-3"> 27.06</dt>
                     <dd class="col-sm-9">Lewis Riston - Kevin Vasquez - Newcastle, Utilita Arena</dd>
                     
@@ -219,3 +223,5 @@ if (isset($_POST['submitForm'])) {
 
 </body>
 </html>
+
+

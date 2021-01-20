@@ -35,6 +35,11 @@ static function logout($databaseConnection) {
     }
     session_destroy();
 }
+
+static function selectNicknames($databaseConnection) {
+    $sql = "SELECT userName FROM users";
+    return $databaseConnection -> select($sql);
+}
 //pobierz id bieżącej sesji (pamiętaj o session_start()
 //usuń sesję (łącznie z ciasteczkiem sesyjnym)
 //usuń wpis z id bieżącej sesji z tabeli logged_in_users

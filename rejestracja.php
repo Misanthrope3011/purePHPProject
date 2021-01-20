@@ -15,6 +15,8 @@ $registrationForm = new RegistrationForm();
 
   if (isset($_POST['submit'])) {
     $databaseConnection -> addUserToDatabase($registrationForm);
+    ?> <script> createPopup("Zarejestrowano pomyslnie. Nastapi przekierowanie do strony glownej", "Elo"); </script>
+    <?php
   }
 
   if (isset($_POST['login'])) {

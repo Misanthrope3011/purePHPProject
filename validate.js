@@ -1,5 +1,7 @@
 $(function()
-{
+{ 
+
+
 var userList=JSON.parse(localStorage.getItem('dataUser'));
 jQuery.validator.addMethod('isUniqueUser', function (value, element) {
 

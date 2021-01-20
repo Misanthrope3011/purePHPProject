@@ -10,7 +10,5 @@ if($indexOfGalery != -1) {
 else {
     $image = new Galery($_POST['titleOfGalery'], $_POST['images'], 0);
 }
-
 $image -> addImagesToDatabase($databaseConnection);
-
 ?>

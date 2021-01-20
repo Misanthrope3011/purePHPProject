@@ -21,7 +21,7 @@ class Comment {
     }
 
     static function getAllCommentsFromArticle($databaseConnection, $articleID) {
-       return $databaseConnection -> select("SELECT comments.commentContent, comments.dateOfCreation, users.userName FROM comments INNER JOIN article ON comments.articleID = article.article_id INNER JOIN users ON comments.userID = users.id WHERE comments.articleID = $articleID");
+       return $databaseConnection -> select("SELECT comments.commentID, comments.commentContent, comments.dateOfCreation, users.userName FROM comments INNER JOIN article ON comments.articleID = article.article_id INNER JOIN users ON comments.userID = users.id WHERE comments.articleID = $articleID");
     }
     /**
      * Get the value of articleContent

@@ -306,3 +306,8 @@ h3#article
     grid-template-columns: 4fr 1fr;
 }
 
+.row {
+  margin-bottom: 20px;
+}
+
+

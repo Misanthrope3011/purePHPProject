@@ -1,3 +1,5 @@
+
+
 <?php
 include_once("classes/User.php");
 include_once("classes/UserDatabase.php");
@@ -6,8 +8,10 @@ include_once("classes/Galery.php");
 include_once("classes/Article.php");
 
 $databaseConnection = new DatabaseConnection('localhost', 'root', '', 'klienci');
+setcookie("userNicknames", json_encode(User::selectNicknames($databaseConnection)));
+?> 
 
-?>
+
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -35,7 +39,6 @@ if (isset($_POST['images']) && isset($_POST['titleOfGalery'])){
   
 
 }
-
 
 if (filter_input(INPUT_GET, "action") == "logout") {
   User::logout($databaseConnection);
@@ -167,6 +170,7 @@ Boxstats.pl
 <div id="link"> Strona: 
 <script>
   $(document).ready(function() {
+
       var numberOfItemsOnPage = '<?php echo Article::$numberOfArticlesOnPage; ?>';
       var numberOfArticles = '<?php echo $numberOfArticles; ?>';
       

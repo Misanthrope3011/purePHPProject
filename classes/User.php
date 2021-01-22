@@ -27,7 +27,6 @@ class User {
     }
   
 static function logout($databaseConnection) {
-    session_start();
     $sessionId = session_id();
     $result = $databaseConnection -> delete("DELETE from logged_in_users WHERE sessionId = '{$sessionId}'");
     if ( isset($_COOKIE[session_name()]) ) {
@@ -40,17 +39,12 @@ static function selectNicknames($databaseConnection) {
     $sql = "SELECT userName FROM users";
     return $databaseConnection -> select($sql);
 }
-//pobierz id bieżącej sesji (pamiętaj o session_start()
-//usuń sesję (łącznie z ciasteczkiem sesyjnym)
-//usuń wpis z id bieżącej sesji z tabeli logged_in_users
 
-    function show() {
-       echo 'password hash: ', $this -> getPassword(), "<br>";
-       echo 'email: ', $this -> getEmail(), "<br>";
-       echo 'date: ', $this -> getDate(), "<br>";
-       echo 'nickname: ', $this -> getnickname(), "<br>";
-       echo 'status robaku: ', $this -> getStatus(), "<br>";
-    }
+static function selectEmails($databaseConnection) {
+    $sql = "SELECT email FROM users";
+    return $databaseConnection -> select($sql);
+}
+
     //zdefiniować pozostałe metody
 
     /**

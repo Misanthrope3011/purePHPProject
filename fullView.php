@@ -65,7 +65,7 @@ if (filter_input(INPUT_GET, "action") == "logout") {
 <?php
   $currentUserData = unserialize($_SESSION['currentUser']);
   echo $currentUserData -> userName .'<br>'. $currentUserData -> id ?> 
-  <br/> <a href = "rejestracja.php?action=logout">"<button id="logOut"> Wyloguj </button> </a>
+  <br/> <a href = "rejestracja.php?action=logout"><button id="logOut"> Wyloguj </button> </a>
 <?php } else {
     echo '<a href="rejestracja.php?"> Zaloguj </a>';
 } ?>
@@ -141,7 +141,7 @@ Boxstats.pl
         if ($currentDisplayedArticle !== NULL) {
           $arrayForArticle = $databaseConnection->select("SELECT * from article WHERE article_id = $currentDisplayedArticle");
           echo ' <div class="post"><h3>' .$arrayForArticle[0] ->title. ' </h3> <b> ' .$arrayForArticle[0] -> header. '</b> <br/> <div id="imageGrid"> ' .$arrayForArticle[0] -> content. '  ';?>
-          <img src = "data:image/jpg;charset=utf8;base64,<?php echo base64_encode($arrayForArticle[0] -> image) ?> " />;  <?php
+         <img src = "data:image/jpg;charset=utf8;base64,<?php echo base64_encode($arrayForArticle[0] -> image) ?> "  alt = "article" />   <?php
           echo '</div> </div>';
         }
   ?>
@@ -185,8 +185,13 @@ Boxstats.pl
       ?>
 </div>
 
+
 </div>
  
+</div>
+
+</div>
+
 </div>
 
 <div class="col-sm-3">
@@ -212,9 +217,8 @@ Boxstats.pl
   </div>
 </div>
 </aside>
-
 </div>
-</div>
-
 </body>
 </html>
+
+

@@ -19,6 +19,7 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 <link rel="stylesheet" type="text/css" href="galeryStyle.css">
 <script src="galerySlider.js"> </script>
+<script src="ajax/delete.js"> </script>
 <script  src="projectJS.js"></script>
 <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,7 +58,7 @@
                 <?php
                   $currentUserData = unserialize($_SESSION['currentUser']);
                   echo $currentUserData -> userName .'<br>'. $currentUserData -> id ?> 
-                  <br/> <a href = "rejestracja.php?action=logout">"<button id="logOut"> Wyloguj </button> </a>
+                  <br/> <a href = "rejestracja.php?action=logout"><button id="logOut"> Wyloguj </button> </a>
                 <?php } else {
                   echo '<a href="rejestracja.php?"> Zaloguj </a>';  
               } ?>
@@ -110,11 +111,9 @@
   </nav>
   <!--/.Navbar-->
       <div class="galeria">
-
-
       <?php
      for ($i = 0; $i < count($arrayOfIndexesAndThumbnails); $i++) { 
-         echo '<div class="inner"> <a href="galerySlider.php?galery='.$arrayOfIndexesAndThumbnails[$i] -> galery_id.'" alt="galeria"> <img src= galeria_zdjecia/'.$arrayOfIndexesAndThumbnails[$i] -> thumbnail . ' alt=zdjecie> </a> <h3>'. $arrayOfIndexesAndThumbnails[$i] -> title .'</h3> </div>';
+         echo '<div class="inner"> <a href="galerySlider.php?galery='.$arrayOfIndexesAndThumbnails[$i] -> galery_id.'" alt="galeria"> <img src= galeria_zdjecia/'.$arrayOfIndexesAndThumbnails[$i] -> thumbnail . ' alt=zdjecie> </a> <h3>'. $arrayOfIndexesAndThumbnails[$i] -> title .'</h3> <button class="deleteGalery" onclick=delete_galery('. $arrayOfIndexesAndThumbnails[$i] ->galery_id.')> x </button> </div>';
     } ?>
       </div>
 

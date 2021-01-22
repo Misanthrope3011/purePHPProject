@@ -91,7 +91,7 @@ if (isset($_POST['submitForm'])) {
 <?php
   $currentUserData = unserialize($_SESSION['currentUser']);
   echo $currentUserData -> userName .'<br>'. $currentUserData -> id ?> 
-  <br/> <a href = "rejestracja.php?action=logout">"<button id="logOut"> Wyloguj </button> </a>
+  <br/> <a href = "rejestracja.php?action=logout"><button id="logOut"> Wyloguj </button> </a>
 <?php } else {
 
     echo '<a href="rejestracja.php?"> Zaloguj </a>';
@@ -208,12 +208,12 @@ if (isset($_POST['submitForm'])) {
                   
                     <dt class="col-sm-3">12.06 </dt>
                     <dd class="col-sm-9">Gala Wach Boxing Night- Mariusz Wach- Kevin Johnson - Pałac w Konarach</dd>
-            W
+          
                     <dt class="col-sm-3"> 27.06</dt>
                     <dd class="col-sm-9">Lewis Riston - Kevin Vasquez - Newcastle, Utilita Arena</dd>
                     
                  
-                    <dt class="col-sm-3">4.07c</dt>
+                    <dt class="col-sm-3">4.07</dt>
                     <dd class="col-sm-9">Dillian White vs Alexander Powietkin - Manchester Arena, WBC Interim World Heavyweight Championship</dd>
                 </dl>
             </div>

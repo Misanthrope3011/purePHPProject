@@ -8,10 +8,7 @@ include_once("classes/Galery.php");
 include_once("classes/Article.php");
 
 $databaseConnection = new DatabaseConnection('localhost', 'root', '', 'klienci');
-setcookie("userNicknames", json_encode(User::selectNicknames($databaseConnection)));
 ?> 
-
-
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -61,7 +58,7 @@ if (isset($_POST['id'])){
 <?php
   $currentUserData = unserialize($_SESSION['currentUser']);
   echo $currentUserData -> userName .'<br>'. $currentUserData -> id ?> 
-  <br/> <a href = "rejestracja.php?action=logout">"<button id="logOut"> Wyloguj </button> </a>
+  <br/> <a href = "rejestracja.php?action=logout"><button id="logOut"> Wyloguj </button> </a>
 <?php } else {
 
     echo '<a href="rejestracja.php?"> Zaloguj </a>';

@@ -52,20 +52,18 @@ class Galery {
                 return $indexAndThumbnailArray;
             }  else return -1;
          }
+         static function selectGaleryTitle($databaseConnection, $galeryID) {
+            $galeryTitle = array();
+            $sql = "SELECT title as thumbnail FROM images WHERE galery_id = $galeryID LIMIT 1";
+            if ($result = $databaseConnection -> getMysqli() -> query($sql)) {
+                while ($row = $result->fetch_object()){
+                    array_push($galeryTitle,$row);
+                }
+                return $galeryTitle;
+            }  else return -1;
+         }
+         
 
-
-
-       
-   /*      static function selectUniqueGaleryIDs($databaseConnection) {
-             $sql = "SELECT DISTINCT galery_id FROM images";
-             if ($result = $databaseConnection->getMysqli() -> query($sql)) {
-              while ($temp = $result->fetch_object()) {
-                    array_push($arrayOfIndexes,$temp);
-              }
-                return $arrayOfIndexes;
-            }
-            return -1;
-        }*/ 
     }
 
  

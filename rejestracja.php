@@ -8,14 +8,19 @@ include_once ("sessionProcessing.php");
 $databaseConnection = new DatabaseConnection("localhost", "root", "", "klienci");
 $registrationForm = new RegistrationForm();
 
+setcookie("userNicknames", json_encode(User::selectNicknames($databaseConnection)));
+setcookie("userEmails", json_encode(User::selectEmails($databaseConnection)));
+
 
   if (filter_input(INPUT_GET, "action") == "logout") {
     User::logout($databaseConnection);
   }
 
   if (isset($_POST['submit'])) {
-    $databaseConnection -> addUserToDatabase($registrationForm);
-    ?> <script> createPopup("Zarejestrowano pomyslnie. Nastapi przekierowanie do strony glownej", "Elo"); </script>
+        $databaseConnection -> addUserToDatabase($registrationForm);
+        ?> <script> $(function() {
+          createPopup("Rejestracja", "Zarejestrowano pomyslnie");
+        }); </script>
     <?php
   }
 
@@ -39,7 +44,7 @@ $registrationForm = new RegistrationForm();
             $('#myModal').modal('show');
              setTimeout(function(){ window.location.replace("index.php");
              }, 1500);
-            }) 
+            }); 
         </script>
       <?php
     } else { ?>
@@ -61,6 +66,7 @@ $registrationForm = new RegistrationForm();
 <script src=
 "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
 </script>
+<script src="js/cookie.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.2/additional-methods.js"> </script>
 <script src="validate.js"></script>
@@ -86,7 +92,7 @@ $registrationForm = new RegistrationForm();
   <?php
     $currentUserData = unserialize($_SESSION['currentUser']);
     echo $currentUserData -> userName .'<br>'. $currentUserData -> id ?> 
-    <br/> <a href = "rejestracja.php?action=logout">"<button id="logOut"> Wyloguj </button> </a>
+    <br/> <a href = "rejestracja.php?action=logout"><button id="logOut"> Wyloguj </button> </a>
   <?php } else {
     echo '<a href="rejestracja.php?"> Zaloguj </a>';
 } ?>
@@ -243,7 +249,7 @@ $registrationForm = new RegistrationForm();
             <label class="form-check-label" for="exampleCheck1"> Akceptuje regulamin* </label>
           </div>
           <br/> 
-          <button type="submit" id="formSubmit" name = "submit" class="btn btn-primary">Submit</button>
+          <button type="submit" id="formSubmit" name = "submit" class="btn btn-primary">Zarejestruj</button>
         </form>
 
       </div>

@@ -12,6 +12,20 @@ function delete_data(id) {
     })
 }
 
+function delete_galery(id) {
+   
+    $.ajax({
+        type : "post",
+        url: "ajax/delete.php",
+        data: {'galeryID': id},
+        success: function(response) {
+            location.reload();
+        },
+        error: function(request, status, error){
+            alert(error);
+          }
+    })
+}
 function delete_comment(id) {
    
     $.ajax({
@@ -26,17 +40,4 @@ function delete_comment(id) {
           }
     })
 }
-/*
-function edit_data(id) {
-    $.ajax({
-        type : "post",
-        url: "create.php", 
-        data: {'id': id},
-        success: function(response) {
-        },
-        error: function(request, status, error){
-            alert("Nie można usunąć");
-          }
-    })
-}
-*/
+

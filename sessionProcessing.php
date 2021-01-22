@@ -8,18 +8,29 @@
 <script src="projectJS.js"></script> 
 <meta charset="UTF-8"> </head>
 <?php
-if (!isset($_SESSION['currentUser'])) {
- ?> <script> 
-    $(document).ready(function() {
-        $(".nav-link").click(function (e) {
-            if($(this).attr("href") == "create.php") {
-                e.preventDefault();
-                $(".modal-body").text( "Nie masz uprawnien do podglądu tej strony. Nastąpi przekierowanie do strony glownej");
-                $(".modal-title").text( "Odmowa dostępu");
-                $('#myModal').modal('show');
-                setTimeout(function(){ window.location.replace("index.php");} , 1500);
-            }
-        });  
-    });
-    </script>
-<?php } ?>         
+
+session_start();
+
+    if (!isset($_SESSION['currentUser'])) {
+    ?> <script> 
+        $(function() {
+                if($(location).attr('pathname') == '/testside/create.php') {
+                    $('h3').hide();
+                    $('#form').hide();
+                    createPopup("Odmowa dostępu", "Nie masz uprawnien do podglądu");
+                    setTimeout(function(){ window.location.replace("index.php");} , 3500);
+                } else
+            if ($(location).attr('pathname') == "/testside/galery.php") {
+                $('#form').hide(); 
+            } 
+        });
+        </script>
+        <?php } 
+        else { ?>  
+            <script> 
+              $(function() {
+                $('#registerForm').hide(); 
+              });
+            </script>
+        <?php            
+        } ?>         

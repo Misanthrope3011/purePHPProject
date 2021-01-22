@@ -1,5 +1,6 @@
+
+
 <?php
-session_start();
 include_once("classes/User.php");
 include_once("classes/UserDatabase.php");
 include_once("sessionProcessing.php");
@@ -7,8 +8,7 @@ include_once("classes/Galery.php");
 include_once("classes/Article.php");
 
 $databaseConnection = new DatabaseConnection('localhost', 'root', '', 'klienci');
-
-?>
+?> 
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -37,7 +37,6 @@ if (isset($_POST['images']) && isset($_POST['titleOfGalery'])){
 
 }
 
-
 if (filter_input(INPUT_GET, "action") == "logout") {
   User::logout($databaseConnection);
 }
@@ -59,7 +58,7 @@ if (isset($_POST['id'])){
 <?php
   $currentUserData = unserialize($_SESSION['currentUser']);
   echo $currentUserData -> userName .'<br>'. $currentUserData -> id ?> 
-  <br/> <a href = "rejestracja.php?action=logout">"<button id="logOut"> Wyloguj </button> </a>
+  <br/> <a href = "rejestracja.php?action=logout"><button id="logOut"> Wyloguj </button> </a>
 <?php } else {
 
     echo '<a href="rejestracja.php?"> Zaloguj </a>';
@@ -134,9 +133,7 @@ Boxstats.pl
 <div id="articleContainer">
 
   <?php
-    
-    $numberOfArticles = Article::displayArticles($databaseConnection);
-
+    $numberOfArticles = Article::displayArticles($databaseConnection, Article::$numberOfArticlesOnPage);
   ?>
 
 </div>
@@ -170,8 +167,10 @@ Boxstats.pl
 <div id="link"> Strona: 
 <script>
   $(document).ready(function() {
-      var numberOfItemsOnPage = 2;
+
+      var numberOfItemsOnPage = '<?php echo Article::$numberOfArticlesOnPage; ?>';
       var numberOfArticles = '<?php echo $numberOfArticles; ?>';
+      
       for(var i = 1; (i < numberOfArticles / (numberOfItemsOnPage) + 1);i++) {
             $("#link").append('<a href="index.php?page='+ i + '" alt="strona">' + i +'</a>' );
         }

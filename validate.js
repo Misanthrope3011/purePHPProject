@@ -1,14 +1,15 @@
 $(function()
-{
-var userList=JSON.parse(localStorage.getItem('dataUser'));
+{ 
+var nicknames = (JSON.parse($.cookie(("userNicknames"))));
+var emails = (JSON.parse($.cookie(("userEmails"))));
+
+
 jQuery.validator.addMethod('isUniqueUser', function (value, element) {
 
-  if(userList!=null) { 
-      $.each(userList, function(i)
-      {
-          if(userList[i].name==$("#nameAndSurname").val())
-        {
-           value=0;
+  if(nicknames != null) { 
+      $.each(nicknames, function(i) {
+          if(nicknames[i].userName == $("#nameAndSurname").val()) {
+           value = 0;
           return false;
         }
       });
@@ -16,10 +17,21 @@ jQuery.validator.addMethod('isUniqueUser', function (value, element) {
 return value!=0; 
   }, 'Już istnieje użytkownik o takim nicku ');
 
-  jQuery.validator.addMethod('correctCode', function(value,element)
-  {
-    return this.optional(element) || /([A-Z0-9]{2}-?){3}[A-Z0-9]{2}/.test(value);
-  });
+
+  jQuery.validator.addMethod('isUniqueEmail', function (value, element) {
+
+    if(emails != null) { 
+        $.each(emails, function(i) {
+            if(emails[i].email == $("#exampleInputEmail1").val()) {
+             value = 0;
+            return false;
+          }
+        });
+  }
+  return value != 0; 
+    }, 'Już istnieje taki email w bazie');
+  
+ 
   
     $("form[name='validate']").validate({   
 
@@ -41,7 +53,7 @@ return value!=0;
          minlength: 6,
          maxlength:20,
          required:true,
-         pattern: "^[A-Za-z][A-Za-z0-9_!#$@#]{6,14}$",
+         pattern: "^[A-Za-z][A-Za-z0-9_!#$@#]{6,20}$",
          isUniqueUser: true 
       },
       acceptPolicy:
@@ -54,6 +66,7 @@ return value!=0;
         email: {
           required: true,
           email: true,
+          isUniqueEmail: true 
         },
         code:
         {
@@ -92,7 +105,8 @@ return value!=0;
         {
          // ifUniqueUser: "Nickname już istnieje",
           required:" To wymagane pole",
-          pattern:"Nick musi zaczynac się od litery i może zawierac tylko _!#$@# znaki specjalne"
+          pattern:"Nick musi zaczynac się od litery i może zawierac tylko _!#$@# znaki specjalne",
+          maxlength: "Max 20 znakow"
         }
       },
 

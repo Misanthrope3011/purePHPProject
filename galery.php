@@ -2,9 +2,9 @@
   include_once("classes/UserDatabase.php");
   include_once("classes/Galery.php");
   include_once("Galery.php");
+  include_once("sessionProcessing.php");
 
   $databaseConnection = new DatabaseConnection('localhost', 'root', '', 'klienci');
-  //$availableGaleryIndexes = Galery::selectUniqueGaleryIDs($databaseConnection);
  $arrayOfIndexesAndThumbnails = Galery::selectImageForThumbnail($databaseConnection);
 ?>
 
@@ -19,6 +19,7 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 <link rel="stylesheet" type="text/css" href="galeryStyle.css">
 <script src="galerySlider.js"> </script>
+<script src="ajax/delete.js"> </script>
 <script  src="projectJS.js"></script>
 <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,8 +34,35 @@
 </head>
 <body>
   <div class="row">
+  <div class="modal" id="myModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Modal title</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" id="close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
     <header>
-      <div id="userDisplayData"> </div>
+    <div id="userDisplayData"> 
+    <?php     if (isset($_SESSION['currentUser'])) { ?>
+                <?php
+                  $currentUserData = unserialize($_SESSION['currentUser']);
+                  echo $currentUserData -> userName .'<br>'. $currentUserData -> id ?> 
+                  <br/> <a href = "rejestracja.php?action=logout"><button id="logOut"> Wyloguj </button> </a>
+                <?php } else {
+                  echo '<a href="rejestracja.php?"> Zaloguj </a>';  
+              } ?>
+      </div>
     <div id="show"> </div>
   <h1>
   Boxstats.pl
@@ -85,7 +113,7 @@
       <div class="galeria">
       <?php
      for ($i = 0; $i < count($arrayOfIndexesAndThumbnails); $i++) { 
-         echo '<div class="inner"> <a href="galerySlider.php?galery='.$i.'" alt="galeria"> <img src= galeria_zdjecia/'.$arrayOfIndexesAndThumbnails[$i] -> thumbnail . ' alt=zdjecie> </a> <h3>'. $arrayOfIndexesAndThumbnails[$i] -> title .'</h3> </div>';
+         echo '<div class="inner"> <a href="galerySlider.php?galery='.$arrayOfIndexesAndThumbnails[$i] -> galery_id.'" alt="galeria"> <img src= galeria_zdjecia/'.$arrayOfIndexesAndThumbnails[$i] -> thumbnail . ' alt=zdjecie> </a> <h3>'. $arrayOfIndexesAndThumbnails[$i] -> title .'</h3> <button class="deleteGalery" onclick=delete_galery('. $arrayOfIndexesAndThumbnails[$i] ->galery_id.')> x </button> </div>';
     } ?>
       </div>
 
@@ -113,9 +141,6 @@
   </form>
 
   <div class = "container"> </div>
-
-
-
 
 </body>
 </html>

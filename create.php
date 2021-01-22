@@ -3,8 +3,7 @@
 include_once("classes/User.php");
 include_once("classes/UserDatabase.php");
 include_once("classes/Article.php");
-
-session_start();
+include_once("sessionProcessing.php");
 
 $databaseConnection = new DatabaseConnection('localhost', 'root', '', 'klienci');
 
@@ -12,15 +11,20 @@ if(filter_input(INPUT_GET, "editId")) {
     $articleId = intval(filter_input(INPUT_GET, "editId"));
     echo "SELECT * from article WHERE article_id= $articleId";
     $articleToEdition = $databaseConnection -> select("SELECT * from article WHERE article_id= $articleId");
-    $articleTitle = $articleToEdition[0] -> title;
-    $articleHeader = $articleToEdition[0] -> header;
-    $articleContent = $articleToEdition[0] -> content;
+    $articleTitle = addslashes($articleToEdition[0] -> title);
+    $articleHeader = addslashes($articleToEdition[0] -> header);
+    $articleHeader = preg_replace( "/\r|\n/", "enter123", $articleHeader);
+    $articleContent = addslashes($articleToEdition[0] -> content);
+    $articleContent = preg_replace( "/\r|\n/", "enter123", $articleContent);
     $imageContent = addslashes($articleToEdition[0] -> image);
   ?>
   <script>
-    var articleTitle = "<?php echo $articleTitle; ?>";
-    var articleHeader = "<?php echo $articleHeader; ?>";
-    var articleContent = "<?php echo $articleContent; ?>";
+    var articleTitle = '<?php echo $articleTitle?>';
+    var articleHeader = '<?php echo $articleHeader ?>';
+    var articleContent = '<?php echo $articleContent ?>';
+
+    var articleHeader = articleHeader.replaceAll('enter123', '\n');
+    var articleContent = articleContent.replaceAll('enter123', '\n');
 
     $(document).ready(function() {
       
@@ -31,14 +35,11 @@ if(filter_input(INPUT_GET, "editId")) {
     });
 
   </script> 
-
-
+  
   <?php
 } 
 
 if (isset($_POST['submitForm'])) {
-
-  session_start();
 
   if (!empty($_FILES["image"]["name"])) {
     $filename = basename($_FILES["image"]["name"]);
@@ -52,7 +53,7 @@ if (isset($_POST['submitForm'])) {
   }
 
   $userData = unserialize($_SESSION['currentUser']);
-  $article = new Article($_POST['title'], $_POST['header'], $_POST['content'], $userData -> id, $imageContent);
+  $article = new Article(addslashes($_POST['title']), addslashes($_POST['header']), addslashes($_POST['content']), $userData -> id, $imageContent);
 
     if(filter_input(INPUT_GET, "editId")){
         $article -> updateArticle($databaseConnection, $articleId);
@@ -85,7 +86,18 @@ if (isset($_POST['submitForm'])) {
   
     <div class="row">
       <header>
-        <div id="userDisplayData"> </div>
+      <div id="userDisplayData"> 
+    <?php     if (isset($_SESSION['currentUser'])) { ?>
+<?php
+  $currentUserData = unserialize($_SESSION['currentUser']);
+  echo $currentUserData -> userName .'<br>'. $currentUserData -> id ?> 
+  <br/> <a href = "rejestracja.php?action=logout"><button id="logOut"> Wyloguj </button> </a>
+<?php } else {
+
+    echo '<a href="rejestracja.php?"> Zaloguj </a>';
+
+} ?>
+</div>
       <div id="show"> </div>
     <h1>
     Boxstats.pl
@@ -172,7 +184,7 @@ if (isset($_POST['submitForm'])) {
     
            <div class="form-group">
               <label for="articleContent">Treść</label>
-              <textarea class="form-control" id="articleContent" name="content" placeholder="Treść" rows="3"></textarea>
+              <textarea class="form-control" id="articleContent" name="content" placeholder="Treść" rows="6"></textarea>
             </div>
     
           <div class="form-group">
@@ -196,12 +208,12 @@ if (isset($_POST['submitForm'])) {
                   
                     <dt class="col-sm-3">12.06 </dt>
                     <dd class="col-sm-9">Gala Wach Boxing Night- Mariusz Wach- Kevin Johnson - Pałac w Konarach</dd>
-            
+          
                     <dt class="col-sm-3"> 27.06</dt>
                     <dd class="col-sm-9">Lewis Riston - Kevin Vasquez - Newcastle, Utilita Arena</dd>
                     
                  
-                    <dt class="col-sm-3">4.07c</dt>
+                    <dt class="col-sm-3">4.07</dt>
                     <dd class="col-sm-9">Dillian White vs Alexander Powietkin - Manchester Arena, WBC Interim World Heavyweight Championship</dd>
                 </dl>
             </div>
@@ -211,3 +223,5 @@ if (isset($_POST['submitForm'])) {
 
 </body>
 </html>
+
+

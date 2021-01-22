@@ -8,6 +8,7 @@ class Article {
     protected $dateOfCreation;
     protected $author;
     protected $articleImage;
+    static $numberOfArticlesOnPage = 3;
     //pozostale pola klasy:
     //...
     //metody klasy:
@@ -20,36 +21,51 @@ class Article {
     $this -> dateOfCreation = new DateTime('NOW');
     $this -> articleImage = $articleImage;
     $this -> author = $author;
-    //nadać wartości pozostałym polom – zgodnie z parametrami
-    //...
+  
     }
 
-    static function displayArticles($databaseConnection) {
-        $numberOfArticlesOnPage = 2;
+    static function getArticlesIds($databaseConnection){
+        return $databaseConnection -> select("SELECT article_id FROM article");
+    }
+
+    static function checkIfArticleExists($databaseConnection, $passedArgument){
+        $allIdsOfArticles = Article::getArticlesIds($databaseConnection);
+        foreach($allIdsOfArticles as $articlesIds) {
+            if ($articlesIds -> article_id == $passedArgument){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static function displayArticles($databaseConnection, $numberOfArticlesOnPage) {
         $arrayForArticle = $databaseConnection->select("SELECT * from article");
+        $arrayForArticle = array_reverse($arrayForArticle);
         if (!(filter_input(INPUT_GET, "page"))) {
            $pageNumber = 1;
         } else {
-           if ((ceil(count($arrayForArticle)/ $numberOfArticlesOnPage)) == intval(filter_input(INPUT_GET, "page"))) 
-           $pageNumber = intval(filter_input(INPUT_GET, "page")); else
-           header('Location:index.php');
-        }
+             if ((ceil(count($arrayForArticle)/ $numberOfArticlesOnPage)) >= intval(filter_input(INPUT_GET, "page"))) {
+                $pageNumber = intval(filter_input(INPUT_GET, "page"));
+            } else {
+                   header("Location:index.php");
+                }
+        } 
         $numberOfArticles = count($arrayForArticle);
         for ($i = (($pageNumber - 1) * $numberOfArticlesOnPage); $i < ($pageNumber * $numberOfArticlesOnPage) && ($i != $numberOfArticles); $i++) {
           if (isset($_SESSION['currentUser'])) {
             $currentUserData = unserialize($_SESSION['currentUser']);
             if($currentUserData -> status == USER::STATUS_USER) {
-              echo ' <div class="post"><h3>' .$arrayForArticle[$i] ->title. ' </h3>    <b> ' .$arrayForArticle[$i] -> header. '</b> <br/>' .$arrayForArticle[$i] -> content. '  <div id="imageGrid"> ';?>
-              <img src = "data:image/jpg;charset=utf8;base64,<?php echo base64_encode($arrayForArticle[$i] -> image) ?> " />;  <?php
-              echo '</div> </div>';
+              echo ' <div class="post"> <h3>' .$arrayForArticle[$i] ->title. ' </h3>    <b> ' .$arrayForArticle[$i] -> header. '</b> <br/>  <div id="imageGrid">' .substr($arrayForArticle[$i] -> content, 0, 450). '  ';?>
+              <img src = "data:image/jpg;charset=utf8;base64,<?php echo base64_encode($arrayForArticle[$i] -> image) ?> " />  <?php
+              echo '</div> </div> <a class = "fullView" href ="fullView.php?showFull=' . $arrayForArticle[$i] -> article_id.'">';
             } else {
-              echo ' <div class="post"><h3>' .$arrayForArticle[$i] ->title. ' </h3>    <b> ' .$arrayForArticle[$i] -> header. '</b> <br/>' .$arrayForArticle[$i] -> content. '  <div id="imageGrid">';?>
-              <img src = "data:image/jpg;charset=utf8;base64,<?php echo base64_encode($arrayForArticle[$i] -> image) ?> " />; 
-              <?php echo '</div>   <button class="btn btn-danger"' . "onclick=delete_data({$arrayForArticle[$i]->article_id})". '> x </button> <a href = "create.php?editId=' .$arrayForArticle[$i] -> article_id .'"  <button class="edit">  E  </button> <a class = "fullView" href ="index.php?showFull=' . $arrayForArticle[$i] -> article_id.'">  View full </a> </div> <hr>';     
+              echo ' <div class="post"><h3>' .$arrayForArticle[$i] ->title. ' </h3>    <b> ' .$arrayForArticle[$i] -> header. '</b> <br/>  <div id="imageGrid">' .substr($arrayForArticle[$i] -> content, 0,  450). ' ';?>
+              <img src = "data:image/jpg;charset=utf8;base64,<?php echo base64_encode($arrayForArticle[$i] -> image) ?> " />
+              <?php echo '</div>   <button class="btn btn-danger"' . "onclick=delete_data({$arrayForArticle[$i]->article_id})". '> x </button> <a href = "create.php?editId=' .$arrayForArticle[$i] -> article_id .'"  <button class="edit">  E  </button> <a class = "fullView" href ="fullView.php?showFull=' . $arrayForArticle[$i] -> article_id.'">  View full </a> </div> <hr>';     
             }
          } else {
-          echo ' <div class="post"><h3>' .$arrayForArticle[$i] ->title. ' </h3>    <b> ' .$arrayForArticle[$i] -> header. '</b> <br/>' .$arrayForArticle[$i] -> content. '  <div id="imageGrid">';?>
-          <img src = "data:image/jpg;charset=utf8;base64,<?php echo base64_encode($arrayForArticle[$i] -> image) ?> " />;  <?php
+          echo ' <div class="post"><h3>' .$arrayForArticle[$i] ->title. ' </h3>    <b> ' .$arrayForArticle[$i] -> header. '</b> <br/> <div id="imageGrid"> ' .substr($arrayForArticle[$i] -> content, 0, 450). '  ';?>
+          <img src = "data:image/jpg;charset=utf8;base64,<?php echo base64_encode($arrayForArticle[$i] -> image) ?> " />  <?php
           echo '</div> </div>';
           }
       }
@@ -78,41 +94,8 @@ class Article {
               echo $databaseConnection->getMysqli()->error;
           }
        }
-       
-
-    function show() {
-
-    }
-    //zdefiniować pozostałe metody
-
-    /**
-     * Get the value of userName
-     */ 
-
-
-    /**
-     * Set the value of userName
-     *
-     * 
-     */ 
- 
-    /*
-     function getAllUsers($plik){
-        $tab = json_decode(file_get_contents($plik));
-
-        foreach ($tab as $val){
-        $date = DateTime::createFromFormat("Y-m-d H:i:s.u", $val -> date -> date);    
-        echo "<p>".$val->nickname." ".$val->nameAndSurname." ".$date->format("Y-m-d ")." </p>";
-        }
-       }
-
-       */
-
-    /**
-     * Get the value of articleTitle
-     */
     
-     
+
     public function getArticleTitle()
     {
         return $this->articleTitle;
